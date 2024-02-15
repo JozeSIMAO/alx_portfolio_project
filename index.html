@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: rgb(0, 0, 0);
-            color: white;
+            background-color: #f1f1f1; /* Light gray background */
+            color: #333; /* Dark gray text color */
             margin-left: 10px;
             margin-right: 10px;
             margin-bottom: 10px;
@@ -23,8 +23,8 @@
         .nav {
             display: flex;
             justify-content: center;
-            padding:15px;
-            background-color: crimson;
+            padding: 15px;
+            background-color: #4CAF50; /* Green navbar */
         }
 
         .nav ul {
@@ -59,7 +59,7 @@
 
         .me h2 {
             margin-bottom: 20px;
-            color:crimson;
+            color: #4CAF50; /* Green heading */
             text-decoration: underline 3px;
         }
 
@@ -71,7 +71,7 @@
         }
 
         .about h2 {
-            color: crimson;
+            color: #4CAF50; /* Green heading */
             text-decoration: underline 3px;
         }
         .about img {
@@ -84,6 +84,47 @@
         .about article {
             margin-top: 20px;
         }
+
+        .contact {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ddd; /* Light gray background */
+            text-align: center;
+            animation: slideInUp 1s ease; /* Apply animation */
+        }
+
+        .contact ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact ul li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .contact ul li a {
+            text-decoration: none;
+            color: #333; /* Dark gray text color */
+            padding: 5px 10px;
+            border: 1px solid #4CAF50; /* Green border */
+            border-radius: 5px;
+        }
+
+        .contact ul li a:hover {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+        }
+
+        /* Keyframes for slide in animation */
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -92,6 +133,7 @@
             <ul>
                 <li><a href="#">HOME</a></li>
                 <li><a href="#abt">ABOUT</a></li>
+                <li><a href="#contact">CONTACT</a></li> <!-- Fixed the link text -->
             </ul>
         </div>
         <div class="me">
@@ -100,13 +142,20 @@
         </div>
         
         <div class="about">
-            <h2>About The Project</h2> <!-- Adjusted heading -->
+            <h2>Movie Rec-System: About The Project</h2> <!-- Adjusted heading -->
             <img src="/alx_portfolio_project/images/home.png" alt="">
             <article id="abt">The app I've decided to create is a Movie Recommender app. It utilizes a lightweight algorithm to search through a vast archive of movies and provide recommendations based on user searches and browsing history. While the app may not be 100% accurate, it fulfills its intended basic functions. In the future, I plan to implement additional features such as notifications, user log-ins, and possibly even trailer videos for each recommended movie.</article>
             <h2>Recommendation Algorithms in Python/Flask</h2>
             <article>Python, with its vast array of libraries and frameworks, offers numerous options for implementing recommendation algorithms. Flask, a lightweight web framework, provides a suitable environment for deploying recommendation systems as web applications. Commonly used recommendation algorithms include collaborative filtering, content-based filtering, and hybrid methods that combine various techniques. These algorithms analyze user preferences, item characteristics, and interaction patterns to generate personalized recommendations. With Flask, developers can easily integrate these algorithms into web applications, enabling users to discover relevant content based on their interests and preferences.</article>
             <h2>New Features to Explore</h2>
             <article>As the Movie Recommender app evolves, there are several exciting features worth exploring. These include implementing machine learning models to improve recommendation accuracy, incorporating social features such as user ratings and reviews, integrating external APIs to fetch additional movie data and metadata, enabling user authentication and personalized user profiles, and enhancing the user interface with interactive elements and dynamic content. By continuously innovating and adding new features, the app can provide a more engaging and enriching experience for its users.</article>
+        </div>
+
+        <div class="contact" id="contact"> <!-- Added an id to the contact section -->
+            <ul>
+                <li><a href="https://github.com/JozeSIMAO/" target="_blank">Github</a></li>
+                <li><a href="https://www.linkedin.com/in/joze-simao-7a2b3326a/" target="_blank">LinkedIn</a></li>
+            </ul>
         </div>
     </div>
 
