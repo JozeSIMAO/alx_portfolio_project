@@ -1,75 +1,48 @@
-import flask
-import json
-from flask import Flask, render_template, request
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import random
+import streamlit as st
+import pickle
+import requests
 
-app = flask.Flask(__name__, template_folder='templates')
+movies = pickle.load(open("movies_list.pkl", 'rb'))
+similarity = pickle.load(open("similarity.pkl", 'rb'))
+movies_list = movies['title'].values
+st.header("Movie Recommender System")
+selectvalue = st.selectbox("Select movie from dropdown", movies_list)
 
-with open('./model/tmdb.json', 'r') as json_file:
-    data = json.load(json_file)
-df2 = pd.DataFrame(data)
-count = CountVectorizer(stop_words='english')
-count_matrix = count.fit_transform(df2['soup'])
+def fetch_poster(movie_id):
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=df3650663d6d7ad60457660b2f58e59f&language=en-US".format(movie_id)
+    data=requests.get(url)
+    data=data.json()
+    poster_path = data['poster_path']
+    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
+    return full_path
 
-cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+def recommend(movie):
+    index=movies[movies['title']==movie].index[0]
+    distance = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda vector:vector[1])
+    recommend_movie=[]
+    recommend_poster=[]
+    for i in distance[1:6]:
+        movies_id = movies.iloc[i[0]].id
+        recommend_movie.append(movies.iloc[i[0]].title)
+        recommend_poster.append(fetch_poster(movies_id))
+    return recommend_movie, recommend_poster
 
-df2 = df2.reset_index()
-indices = pd.Series(df2.index, index=df2['title'])
-all_titles = df2['title'].tolist()
+if st.button("Show Recommended"):
+    movie_name, movie_poster = recommend(selectvalue)
+    col1,col2,col3,col4,col5=st.columns(5)
 
-def get_recommendations(title):
-    cosine_sim = cosine_similarity(count_matrix, count_matrix)
-    idx = indices[title]
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:11]
-    movie_indices = [i[0] for i in sim_scores]
-    tit = df2['title'].iloc[movie_indices]
-    dat = df2['release_date'].iloc[movie_indices]
-    rating = df2['vote_average'].iloc[movie_indices]
-    moviedetails=df2['overview'].iloc[movie_indices]
-    movietypes=df2['keywords'].iloc[movie_indices]
-    movieid=df2['id'].iloc[movie_indices]
-
-    return_df = pd.DataFrame(columns=['Title','Year'])
-    return_df['Title'] = tit
-    return_df['Year'] = dat
-    return_df['Ratings'] = rating
-    return_df['Overview']=moviedetails
-    return_df['Types']=movietypes
-    return_df['ID']=movieid
-    return return_df
-
-def get_suggestions():
-    return df2['title'].str.capitalize().tolist()
-
-@app.route("/")
-@app.route("/index")
-def index():
-    NewMovies=[]
-    new_movie = random.choice(all_titles)
-    NewMovies.append([new_movie])
-    m_name = new_movie.title()
-    
-    with open('movieR.json', 'a') as json_file:
-        json.dump({'Movie': m_name}, json_file)
-        
-    result_final = get_recommendations(m_name)
-    names = result_final['Title'].tolist()
-    dates = result_final['Year'].tolist()
-    ratings = result_final['Ratings'].tolist()
-    overview = result_final['Overview'].tolist()
-    types = result_final['Types'].tolist()
-    mid = result_final['ID'].tolist()
-    
-    suggestions = get_suggestions()
-    
-    return render_template('index.html', suggestions=suggestions, movie_type=types[5:], movieid=mid,
-                           movie_overview=overview, movie_names=names, movie_date=dates, movie_ratings=ratings,
-                           search_name=m_name)
-
-if __name__ == '__main__':
-    app.run()
+    with col1:
+        st.text(movie_name[0])
+        st.image(movie_poster[0])
+    with col2:
+        st.text(movie_name[1])
+        st.image(movie_poster[1])
+    with col3:
+        st.text(movie_name[2])
+        st.image(movie_poster[2])
+    with col4:
+        st.text(movie_name[3])
+        st.image(movie_poster[3])
+    with col5:
+        st.text(movie_name[4])
+        st.image(movie_poster[4])
