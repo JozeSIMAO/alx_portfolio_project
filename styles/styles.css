@@ -1,0 +1,46 @@
+body {
+    background-color: #ffffff; /* Set background color to white */
+    overflow: hidden; /* Hide overflow to prevent scroll bars */
+}
+
+/* Define the animation for floating circles */
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-50px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Style for the circles */
+.circle {
+    position: absolute;
+    width: 20px; /* Adjust size of the circles */
+    height: 20px; /* Adjust size of the circles */
+    background-color: black; /* Set color of the circles */
+    border-radius: 50%; /* Make circles round */
+    animation: float 3s ease-in-out infinite; /* Apply animation to circles */
+}
+
+/* Position and animate individual circles */
+.circle:nth-child(1) {
+    top: 10%;
+    left: 10%;
+}
+
+.circle:nth-child(2) {
+    top: 20%;
+    left: 50%;
+}
+
+.circle:nth-child(3) {
+    top: 30%;
+    left: 90%;
+}
+
+/* Add more circle positions as needed */
+
